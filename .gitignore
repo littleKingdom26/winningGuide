@@ -37,3 +37,6 @@ next-env.d.ts
 *.swp
 *.swo
 *~
+
+# data directory (user-specific data)
+/data
