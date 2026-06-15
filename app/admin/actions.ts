@@ -16,10 +16,15 @@ export async function getSong(id: string): Promise<CheerSong | null> {
 
 export async function createSong(songData: Omit<CheerSong, 'id' | 'createdAt'>): Promise<CheerSong> {
   const songs = await readData<CheerSong>('songs.json');
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  
   const newSong: CheerSong = {
     ...songData,
     id: Date.now().toString(),
-    createdAt: new Date().toISOString().split('T')[0],
+    createdAt: `${year}.${month}.${day}`,
   };
   songs.push(newSong);
   await writeData('songs.json', songs);

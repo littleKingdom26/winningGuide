@@ -20,6 +20,7 @@ export default function SongFormPageContent() {
     lyrics: '',
     videoUrl: '',
     tags: [] as string[],
+    notes: '',
   });
 
   const [newTag, setNewTag] = useState('');
@@ -43,6 +44,7 @@ export default function SongFormPageContent() {
           lyrics: song.lyrics,
           videoUrl: song.videoUrl,
           tags: song.tags,
+          notes: song.notes || '',
         });
       }
     } catch (error) {
@@ -172,6 +174,17 @@ export default function SongFormPageContent() {
             onChange={(e) => setFormData(prev => ({ ...prev, videoUrl: e.target.value }))}
             className="w-full h-12 px-4 bg-suwon-navy/50 border border-suwon-red/30 rounded-button text-suwon-textPrimary placeholder-suwon-textSecondary focus:outline-none focus:border-suwon-red"
             placeholder="YouTube Embed URL (예: https://www.youtube.com/embed/...)"
+          />
+        </div>
+
+        {/* 참고사항 */}
+        <div>
+          <label className="block text-body2 text-suwon-textPrimary mb-2">참고사항</label>
+          <textarea
+            value={formData.notes}
+            onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
+            className="w-full min-h-[100px] px-4 py-3 bg-suwon-navy/50 border border-suwon-red/30 rounded-button text-suwon-textPrimary placeholder-suwon-textSecondary focus:outline-none focus:border-suwon-red resize-y"
+            placeholder="응원가에 대한 추가 설명이나 메모 (선택사항)"
           />
         </div>
 

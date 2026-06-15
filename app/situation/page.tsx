@@ -16,15 +16,15 @@ export default async function SituationPage() {
 
   return (
     <div className="p-4 space-y-6">
-      <div className="text-center mb-4">
+      <div className="text-center mb-5">
         <h1 className="text-h1 text-suwon-textPrimary mb-2">상황별 응원</h1>
         <p className="text-body2 text-suwon-textSecondary">경기 상황에 맞는 응원법을 찾아보세요</p>
       </div>
 
       {Object.entries(groupedSongs).map(([category, songs]) => (
-        <div key={category}>
+        <div key={category} className="mb-5">
           <h2 className="text-h2 text-suwon-textPrimary mb-3">{categoryNames[category as keyof typeof categoryNames]}</h2>
-          <div className="space-y-3">
+          <div className="space-y-4">
             {songs.map((song) => (
               <Link key={song.id} href={`/situation/${song.id}`}>
                 <Card className="cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">

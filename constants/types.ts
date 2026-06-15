@@ -9,6 +9,7 @@ export interface CheerSong {
   targetPlayerId?: string;
   tags: string[];
   createdAt: string;
+  notes?: string;
 }
 
 export interface PlayerProfile {

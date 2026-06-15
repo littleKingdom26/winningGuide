@@ -38,11 +38,24 @@ export default async function SituationDetailPage({ params }: { params: { id: st
           </div>
 
           {/* 추가 정보 */}
-          <div className="flex items-center gap-4 text-caption text-suwon-textSecondary">
+          <div className="flex items-center gap-2 text-caption text-suwon-textSecondary">
             <span>등록일: {song.createdAt}</span>
-            <span>•</span>
-            <span>조회수: {Math.floor(Math.random() * 1000) + 100}</span>
           </div>
+
+          {/* 참고사항 */}
+          {song.notes && (
+            <div className="mt-4">
+              <h3 className="text-h3 text-suwon-textPrimary mb-2 flex items-center gap-2">
+                <span>📝</span>
+                <span>참고사항</span>
+              </h3>
+              <div className="bg-suwon-blue/5 rounded-card p-4 border border-suwon-blue/20">
+                <p className="text-body2 text-suwon-textPrimary whitespace-pre-wrap leading-relaxed">
+                  {song.notes}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

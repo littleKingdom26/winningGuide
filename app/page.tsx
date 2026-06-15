@@ -24,7 +24,7 @@ export default async function Home() {
       </Link>
 
       {/* 카테고리 바로가기 */}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-3 mb-5">
         <Link href="/situation">
           <Card className="flex flex-col items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
             <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center mb-2">
@@ -44,12 +44,12 @@ export default async function Home() {
       </div>
 
       {/* 오늘의 Hot 응원법 */}
-      <div>
+      <div className="mb-5">
         <div className="flex items-center gap-2 mb-3">
           <Flame size={20} className="text-suwon-red" />
           <h2 className="text-h2 text-suwon-textPrimary">오늘의 Hot 응원법</h2>
         </div>
-        <div className="space-y-3">
+        <div className="space-y-4">
           {hotCheerSongs.map((song) => (
             <Link key={song.id} href={`/situation/${song.id}`}>
               <Card className="cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
