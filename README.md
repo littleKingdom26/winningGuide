@@ -13,6 +13,7 @@
 - **선수별 응원**: 선수 개별 응원가와 세레머니 (백번호순 정렬)
 - **통합 검색**: 선수명, 응원가명, 가사 내용으로 빠른 검색
 - **상세 페이지**: 동영상 임베드, 가사 표시, 가사 복사 및 공유 기능
+- **참고사항**: 응원가에 대한 추가 설명과 메모
 
 ## 🚀 기술 스택
 
@@ -20,6 +21,7 @@
 - **언어**: TypeScript
 - **스타일링**: Tailwind CSS v3+
 - **아이콘**: lucide-react
+- **데이터베이스**: Redis (ioredis)
 - **배포**: Vercel
 
 ## 🎨 디자인 시스템
@@ -52,8 +54,15 @@
 │   ├── player/             # 선수별 응원
 │   │   ├── page.tsx        # 선수 목록
 │   │   └── [id]/page.tsx   # 선수 상세
-│   └── search/             # 통합 검색
-│       └── page.tsx
+│   ├── search/             # 통합 검색
+│   │   └── page.tsx
+│   ├── admin/              # 어드민 시스템
+│   │   ├── login/          # 로그인
+│   │   ├── actions.ts      # Server Actions
+│   │   ├── songs/          # 응원가 관리
+│   │   └── players/        # 선수 관리
+│   └── api/
+│       └── initialize-kv/  # Redis 초기화
 ├── components/
 │   ├── common/             # 공용 컴포넌트
 │   │   ├── Button.tsx
@@ -66,6 +75,8 @@
 ├── constants/
 │   ├── types.ts            # TypeScript 타입 정의
 │   └── mockData.ts         # 모의 데이터
+├── lib/
+│   └── dataManager.ts      # 데이터 관리 (Redis + 파일 시스템)
 └── styles/
     └── globals.css         # 글로벌 스타일
 ```
@@ -76,6 +87,18 @@
 
 ```bash
 npm install
+```
+
+### 환경 변수 설정
+
+1. `.env.local.example`을 복사하여 `.env.local` 생성:
+```bash
+cp .env.local.example .env.local
+```
+
+2. Redis URL 설정 (이미 제공된 URL 사용):
+```env
+REDIS_URL="redis://default:mcLz7NNMXv7ema8GhIdCXT58qhJUfMVM@increase-taste-sagely-49830.db.redis.io:10621"
 ```
 
 ### 개발 서버 실행
@@ -106,9 +129,46 @@ npm start
 - 하단 탭 네비게이션
 - 한 손 조작 최적화 UI
 
-## 🔄 데이터 연동 (향후 계획)
+## 🔄 데이터 연동
 
-현재는 Mock Data를 사용하고 있으며, 추후 다음과 같은 CMS 연동이 예정되어 있습니다:
+### 현재 구현 (JSON + Redis)
+- **로컬 개발**: `public/data/` JSON 파일 사용
+- **프로덕션**: Redis (ioredis) 사용
+- **하이브리드 방식**: Redis 우선 → 파일 시스템 백업
+
+### Redis 설정
+
+#### 1. Redis 연결
+환경 변수 `REDIS_URL`을 설정하면 자동으로 연결됩니다:
+```env
+REDIS_URL="redis://default:username:password@host:port"
+```
+
+#### 2. 초기 데이터 설정
+배포 후 Redis에 초기 데이터를 로드:
+```
+GET /api/initialize-kv
+```
+
+응답 예시:
+```json
+{
+  "success": true,
+  "message": "Redis initialized successfully",
+  "data": {
+    "songs": 5,
+    "players": 11
+  }
+}
+```
+
+### 데이터 동기화
+- **읽기**: Redis → 없으면 파일 시스템 → Redis에 저장
+- **쓰기**: Redis → 파일 시스템 (백업)
+- **배포 환경**: Redis만 사용 (파일 시스템은 읽기 전용)
+- **로컬 환경**: 파일 시스템 사용 (Redis 선택사항)
+
+### 향후 CMS 연동 (예정)
 - Notion API
 - Strapi Headless CMS
 - Sanity CMS
@@ -127,6 +187,7 @@ npm start
 - ✅ 핵심 기능 구현
 - ✅ 모바일 최적화
 - ✅ JSON 기반 어드민 시스템
+- ✅ Redis 통합
 
 ## 🔧 어드민 시스템
 
@@ -137,24 +198,27 @@ npm start
 
 ### 주요 기능
 - **대시보드**: 통계 확인, 빠른 작업, 최근 업데이트 내역
-- **응원가 관리**: 등록, 수정, 삭제, 검색, 카테고리 필터링
+- **응원가 관리**: 등록, 수정, 삭제, 검색, 카테고리 필터링, 참고사항 입력
 - **선수 관리**: 등록, 수정, 삭제, 검색, 백번호순 정렬
-- **실시간 업데이트**: JSON 파일 수정 후 자동 페이지 리로드
+- **작성일 자동 생성**: YYYY.MM.DD 형식
+- **실시간 업데이트**: 데이터 수정 후 자동 페이지 리로드
 
 ### 데이터 관리
-- **응원가 데이터**: `public/data/songs.json`
-- **선수 데이터**: `public/data/players.json`
-- **자동 백업**: Git을 통한 버전 관리
+- **응원가 데이터**: `public/data/songs.json` → Redis
+- **선수 데이터**: `public/data/players.json` → Redis
+- **자동 백업**: Git을 통한 버전 관리 + Redis
+- **하이브리드 저장**: Redis 우선, 파일 시스템 백업
 - **쉬운 마이그레이션**: 추후 CMS로 쉽게 이전 가능
 
 ## 🚀 향후 기능
 
-- CMS 데이터 연동
+- CMS 데이터 연동 (Notion, Strapi, Sanity)
 - 실시간 검색 최적화
 - 무한 스크롤
 - 카카오톡 공유 개선
 - 응원 용품 쇼핑몰 연동
 - 커뮤니티 기능
+- 알림 기능 (경기 시작, 득점 등)
 
 ## 📝 라이선스
 

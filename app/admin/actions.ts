@@ -27,10 +27,17 @@ export async function createSong(songData: Omit<CheerSong, 'id' | 'createdAt'>):
     createdAt: `${year}.${month}.${day}`,
   };
   songs.push(newSong);
-  await writeData('songs.json', songs);
-  revalidatePath('/admin/songs');
-  revalidatePath('/');
-  revalidatePath('/situation');
+  
+  try {
+    await writeData('songs.json', songs);
+    revalidatePath('/admin/songs');
+    revalidatePath('/');
+    revalidatePath('/situation');
+  } catch (error) {
+    console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+    // 에러가 발생해도 계속 진행 (개발 환경에서는 계속 작동)
+  }
+  
   return newSong;
 }
 
@@ -39,19 +46,27 @@ export async function updateSong(id: string, songData: Partial<CheerSong>): Prom
   const index = songs.findIndex(s => s.id === id);
   if (index !== -1) {
     songs[index] = { ...songs[index], ...songData };
-    await writeData('songs.json', songs);
-    revalidatePath('/admin/songs');
-    revalidatePath(`/situation/${id}`);
+    try {
+      await writeData('songs.json', songs);
+      revalidatePath('/admin/songs');
+      revalidatePath(`/situation/${id}`);
+    } catch (error) {
+      console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+    }
   }
 }
 
 export async function deleteSong(id: string): Promise<void> {
   const songs = await readData<CheerSong>('songs.json');
   const filtered = songs.filter(s => s.id !== id);
-  await writeData('songs.json', filtered);
-  revalidatePath('/admin/songs');
-  revalidatePath('/');
-  revalidatePath('/situation');
+  try {
+    await writeData('songs.json', filtered);
+    revalidatePath('/admin/songs');
+    revalidatePath('/');
+    revalidatePath('/situation');
+  } catch (error) {
+    console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+  }
 }
 
 // 선수 관리 Actions
@@ -71,9 +86,13 @@ export async function createPlayer(playerData: Omit<PlayerProfile, 'id'>): Promi
     id: `p${Date.now()}`,
   };
   players.push(newPlayer);
-  await writeData('players.json', players);
-  revalidatePath('/admin/players');
-  revalidatePath('/player');
+  try {
+    await writeData('players.json', players);
+    revalidatePath('/admin/players');
+    revalidatePath('/player');
+  } catch (error) {
+    console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+  }
   return newPlayer;
 }
 
@@ -82,18 +101,26 @@ export async function updatePlayer(id: string, playerData: Partial<PlayerProfile
   const index = players.findIndex(p => p.id === id);
   if (index !== -1) {
     players[index] = { ...players[index], ...playerData };
-    await writeData('players.json', players);
-    revalidatePath('/admin/players');
-    revalidatePath(`/player/${id}`);
+    try {
+      await writeData('players.json', players);
+      revalidatePath('/admin/players');
+      revalidatePath(`/player/${id}`);
+    } catch (error) {
+      console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+    }
   }
 }
 
 export async function deletePlayer(id: string): Promise<void> {
   const players = await readData<PlayerProfile>('players.json');
   const filtered = players.filter(p => p.id !== id);
-  await writeData('players.json', filtered);
-  revalidatePath('/admin/players');
-  revalidatePath('/player');
+  try {
+    await writeData('players.json', filtered);
+    revalidatePath('/admin/players');
+    revalidatePath('/player');
+  } catch (error) {
+    console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+  }
 }
 
 // 통계 Actions
