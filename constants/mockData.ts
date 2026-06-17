@@ -88,6 +88,9 @@ export const categoryNames = {
   GAMEOVER: '경기종료',
   EXTRATIME: '추가시간',
   GENERAL: '일반',
+  PLAYER_ENTRY: '선수단 입장',
+  VICTORY: '승리 확정',
+  SETPIECE: '세트피스 응원',
 };
 
 export const positionNames = {
