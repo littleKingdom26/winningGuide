@@ -1,15 +1,12 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
+import { readData } from '@/lib/dataManager';
 
 export async function GET() {
   try {
-    const filePath = path.join(process.cwd(), 'public', 'data', 'songs.json');
-    const fileData = await fs.readFile(filePath, 'utf-8');
-    const songs = JSON.parse(fileData);
+    const songs = await readData('songs.json');
     return NextResponse.json(songs);
   } catch (error) {
-    console.error('Error reading songs.json:', error);
+    console.error('Error reading songs data:', error);
     return NextResponse.json([], { status: 500 });
   }
 }
