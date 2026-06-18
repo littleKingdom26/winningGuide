@@ -1,12 +1,78 @@
-import { Search } from 'lucide-react';
+import { Search, BookOpen, Calendar, ExternalLink, Home as HomeIcon, Car, Clock, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import Card from '@/components/common/Card';
 import { readData } from '@/lib/dataManager';
-import { CheerSong } from '@/constants/types';
+import { CheerSong, CheerGuide, GameSchedule, GameStatus, HomeAway } from '@/constants/types';
 
 export default async function Home() {
   const songs = await readData<CheerSong>('songs.json');
+  const guides = await readData<CheerGuide>('cheer-guides.json');
+  const schedules = await readData<GameSchedule>('game-schedules.json');
+  
   const hotCheerSongs = songs.slice(0, 3);
+  const featuredGuides = guides.slice(0, 2);
+  
+  // 다가오는 경기 찾기
+  const now = new Date();
+  const upcomingMatch = [...schedules]
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+    .find(s => new Date(s.date) >= now);
+
+  // 경기 상태 표시 함수
+  const getStatusDisplay = (status: GameStatus, homeScore?: number, awayScore?: number) => {
+    switch (status) {
+      case 'live':
+        return (
+          <div className="flex items-center gap-1">
+            <div className="w-2 h-2 bg-suwon-red rounded-full animate-pulse" />
+            <span className="text-caption text-suwon-red font-bold">LIVE</span>
+            <span className="text-h3 text-suwon-textPrimary font-bold">
+              {homeScore} : {awayScore}
+            </span>
+          </div>
+        );
+      case 'finished':
+        return (
+          <span className="text-h3 text-suwon-textPrimary font-bold">
+            {homeScore} : {awayScore}
+          </span>
+        );
+      default:
+        return (
+          <span className="text-caption text-suwon-blue">예정</span>
+        );
+    }
+  };
+
+  // 홈/어웨이 표시 함수
+  const getHomeAwayDisplay = (homeAway: HomeAway, opponent: string) => {
+    if (homeAway === 'home') {
+      return (
+        <div className="flex items-center gap-2">
+          <HomeIcon className="w-4 h-4 text-suwon-red" />
+          <span className="text-body2 text-suwon-textPrimary">vs</span>
+          <span className="text-body1 text-suwon-textPrimary font-bold">{opponent}</span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex items-center gap-2">
+          <Car className="w-4 h-4 text-suwon-blue" />
+          <span className="text-body2 text-suwon-textPrimary">@</span>
+          <span className="text-body1 text-suwon-textPrimary font-bold">{opponent}</span>
+        </div>
+      );
+    }
+  };
+
+  // 날짜 포맷팅 함수
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const dayOfWeek = ['일', '월', '화', '수', '목', '금', '토'][date.getDay()];
+    return `${month}/${day} (${dayOfWeek})`;
+  };
   
   return (
     <div className="p-4 space-y-6">
@@ -23,30 +89,50 @@ export default async function Home() {
         </div>
       </Link>
 
-      {/* 카테고리 바로가기 */}
-      <div className="grid grid-cols-2 gap-4 mb-5">
-        <Link href="/situation">
-          <Card className="flex flex-col items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
-            <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center mb-2">
-              <img
-                src="/images/suwonfc-logo-small.png"
-                alt="상황별 응원"
-                className="w-6 h-6"
-              />
+      {/* 다가오는 경기 */}
+      {upcomingMatch && (
+        <Link href="/match-schedule" className="block">
+          <Card className="p-4 border-2 border-suwon-red/30 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 bg-suwon-red rounded-full animate-pulse" />
+              <h2 className="text-h2 text-suwon-textPrimary font-bold">다가오는 경기</h2>
             </div>
-            <span className="text-h3 text-suwon-textPrimary">상황별 응원</span>
+            <div className="flex justify-between items-start mb-3">
+              <div className="flex-1">
+                <div className="mb-1">
+                  {getHomeAwayDisplay(upcomingMatch.homeAway, upcomingMatch.opponent)}
+                </div>
+              </div>
+              {getStatusDisplay(upcomingMatch.status, upcomingMatch.homeScore, upcomingMatch.awayScore)}
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                <Clock className="w-4 h-4" />
+                <span>{formatDate(upcomingMatch.date)} {upcomingMatch.time}</span>
+              </div>
+              <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                <MapPin className="w-4 h-4" />
+                <span>{upcomingMatch.venue}</span>
+              </div>
+            </div>
           </Card>
         </Link>
-        <Link href="/player">
-          <Card className="flex flex-col items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
-            <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center mb-2">
-              <img
-                src="/images/suwonfc-logo-small.png"
-                alt="선수별 응원"
-                className="w-6 h-6"
-              />
+      )}
+
+      {/* 카테고리 바로가기 */}
+      <div className="mb-5">
+        <Link href="/situation">
+          <Card className="flex items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center">
+                <img
+                  src="/images/suwonfc-logo-small.png"
+                  alt="응원가"
+                  className="w-6 h-6"
+                />
+              </div>
+              <span className="text-h3 text-suwon-textPrimary">응원가 목록</span>
             </div>
-            <span className="text-h3 text-suwon-textPrimary">선수별 응원</span>
           </Card>
         </Link>
       </div>
@@ -78,6 +164,41 @@ export default async function Home() {
           </Link>
         ))}
       </div>
+
+      {/* 응원 팁 */}
+      {featuredGuides.length > 0 && (
+        <div className="mb-5">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-h2 text-suwon-textPrimary">응원 팁</h2>
+            <Link href="/cheer-guide" className="text-caption text-suwon-blue hover:underline">
+              더보기 →
+            </Link>
+          </div>
+          <div className="space-y-3">
+            {featuredGuides.map((guide, index) => (
+              <Link 
+                key={guide.id} 
+                href="/cheer-guide"
+                className={`block ${index === featuredGuides.length - 1 ? '' : 'mb-3'}`}
+              >
+                <Card className="p-4 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-suwon-cardDark flex items-center justify-center text-suwon-yellow">
+                      <BookOpen size={20} />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-h3 text-suwon-textPrimary font-bold mb-1">{guide.title}</h3>
+                      <p className="text-caption text-suwon-textSecondary line-clamp-2">
+                        {guide.content}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

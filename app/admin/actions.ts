@@ -1,7 +1,7 @@
 'use server';
 
 import { readData, writeData } from '@/lib/dataManager';
-import { CheerSong, PlayerProfile } from '@/constants/types';
+import { CheerSong, PlayerProfile, CheerGuide, GameSchedule, GoogleCalendarConfig } from '@/constants/types';
 import { revalidatePath } from 'next/cache';
 
 // 응원가 관리 Actions

@@ -1,13 +1,14 @@
 'use client';
 
-import { Home, LayoutList, Users, Search } from 'lucide-react';
+import { Home, LayoutList, BookOpen, Calendar, Search } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
   { icon: Home, label: '홈', path: '/' },
-  { icon: LayoutList, label: '상황별', path: '/situation' },
-  { icon: Users, label: '선수별', path: '/player' },
+  { icon: LayoutList, label: '응원가', path: '/situation' },
+  { icon: BookOpen, label: '응원팁', path: '/cheer-guide' },
+  { icon: Calendar, label: '경기일정', path: '/match-schedule' },
   { icon: Search, label: '검색', path: '/search' },
 ];
 

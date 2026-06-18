@@ -1,0 +1,16 @@
+[
+  {
+    "id": "cal-1781801710448",
+    "name": "수원FC 남자",
+    "url": "https://calendar.google.com/calendar/ical/b060d4ef18db1dd36dbfc5f82eb6659faece6f860c3bc635f684de1432292998%40group.calendar.google.com/public/basic.ics",
+    "isActive": true,
+    "createdAt": "2026-06-18"
+  },
+  {
+    "id": "cal-1781803004729",
+    "name": "수원FC 위민",
+    "url": "https://calendar.google.com/calendar/ical/13440558ec9f5c7f27e53fdce2cd520c55d90ca933ecde51129a521e60f232f5%40group.calendar.google.com/public/basic.ics",
+    "isActive": false,
+    "createdAt": "2026-06-18"
+  }
+]

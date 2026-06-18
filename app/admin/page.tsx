@@ -1,10 +1,14 @@
 import { getStats } from './actions';
-import { Music, Users, TrendingUp, Clock } from 'lucide-react';
+import { Music, Users, TrendingUp, Clock, BookOpen, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import Button from '@/components/common/Button';
+import { readData } from '@/lib/dataManager';
+import { CheerGuide, GameSchedule } from '@/constants/types';
 
 export default async function AdminDashboard() {
   const stats = await getStats();
+  const guides = await readData<CheerGuide>('cheer-guides.json');
+  const schedules = await readData<GameSchedule>('game-schedules.json');
 
   const categoryNames = {
     GOAL: '득점',
@@ -38,22 +42,20 @@ export default async function AdminDashboard() {
           <p className="text-4xl font-bold text-white">{stats.totalPlayers}</p>
         </div>
 
-        <div className="bg-suwon-cardDark rounded-card p-6 border-2 border-suwon-red/30">
+        <div className="bg-gradient-to-br from-suwon-yellow to-yellow-600 rounded-card p-6 shadow-lg">
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp className="text-suwon-red" size={24} />
-            <span className="text-caption text-suwon-textSecondary">카테고리 수</span>
+            <BookOpen className="text-white/80" size={24} />
+            <span className="text-caption text-white/60">응원 팁</span>
           </div>
-          <p className="text-4xl font-bold text-suwon-textPrimary">{Object.keys(stats.songsByCategory).length}</p>
+          <p className="text-4xl font-bold text-white">{guides.length}</p>
         </div>
 
         <div className="bg-suwon-cardDark rounded-card p-6 border-2 border-suwon-blue/30">
           <div className="flex items-center justify-between mb-2">
-            <Clock className="text-suwon-blue" size={24} />
-            <span className="text-caption text-suwon-textSecondary">최근 업데이트</span>
+            <Calendar className="text-suwon-blue" size={24} />
+            <span className="text-caption text-suwon-textSecondary">경기 일정</span>
           </div>
-          <p className="text-2xl font-bold text-suwon-textPrimary">
-            {stats.recentSongs[0]?.createdAt || '-'}
-          </p>
+          <p className="text-4xl font-bold text-suwon-textPrimary">{schedules.length}</p>
         </div>
       </div>
 
@@ -74,6 +76,22 @@ export default async function AdminDashboard() {
               <div className="flex items-center gap-3">
                 <Users size={24} />
                 <span>새 선수 등록하기</span>
+              </div>
+            </Button>
+          </Link>
+          <Link href="/admin/cheer-guides">
+            <Button variant="outline" size="lg" fullWidth className="h-16 text-body1 border-suwon-yellow/50 text-suwon-yellow hover:bg-suwon-yellow/10">
+              <div className="flex items-center gap-3">
+                <BookOpen size={24} />
+                <span>응원팁/매너 관리</span>
+              </div>
+            </Button>
+          </Link>
+          <Link href="/admin/game-schedules">
+            <Button variant="outline" size="lg" fullWidth className="h-16 text-body1 border-suwon-blue/50 text-suwon-blue hover:bg-suwon-blue/10">
+              <div className="flex items-center gap-3">
+                <Calendar size={24} />
+                <span>경기 일정 관리</span>
               </div>
             </Button>
           </Link>
