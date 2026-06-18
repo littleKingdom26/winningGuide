@@ -11,16 +11,23 @@ module.exports = {
       colors: {
         suwon: {
         // 메인 컬러
-        navy: '#1e3a5f',
-        red: '#EB0028',
+        navy: '#1E3A5F',      // 기본 네이비 - 수원화성의 견고함
+        red: '#EB0028',       // 포인트 레드 - 열정과 공격성
+
         // 서브 컬러
-        blue: '#0066cc',
-        yellow: '#ffb300',
-        // 시스템 컬러 (다크모드 전용)
-        bgDark: '#16213e',
-        cardDark: '#1a2f4f',
+        blue: '#0066CC',      // 로열 블루 - 품격
+        yellow: '#FFB300',    // 하이라이트 옐로우 - 에너지
+
+        // 다크 모드
+        bgDark: '#0F1F3A',    // 메인 배경
+        cardDark: '#1A3054',  // 카드 컴포넌트
         textPrimary: '#FFFFFF',
-        textSecondary: '#c0c5d0',
+        textSecondary: '#D0D5E0',
+
+        // 기능 컬러
+        success: '#22C55E',
+        warning: '#FFB300',
+        error: '#EF4444',
         },
       },
       fontSize: {
@@ -34,7 +41,18 @@ module.exports = {
       borderRadius: {
         'button': '12px',
         'card': '16px',
-      }
+        'badge': '20px',
+      },
+      boxShadow: {
+        'card': '0 4px 16px rgba(30, 58, 95, 0.15)',
+        'card-hover': '0 8px 24px rgba(30, 58, 95, 0.25)',
+        'hot-badge': '0 2px 8px rgba(235, 0, 40, 0.4)',
+      },
+      backgroundImage: {
+        'gradient-header': 'linear-gradient(180deg, #1E3A5F 0%, #0F1F3A 100%)',
+        'gradient-hot': 'linear-gradient(135deg, #EB0028, #FF3333)',
+        'gradient-bottom': 'linear-gradient(180deg, transparent, #0F1F3A 20%, #0F1F3A)',
+      },
     },
   },
   plugins: [],

@@ -13,10 +13,32 @@ export default async function SituationDetailPage({ params }: { params: { id: st
   }
 
   return (
-    <div className="pb-24">
-      <div className="p-4 space-y-4">
+    <div className="relative pb-24">
+      {/* 수원FC 워터마크 */}
+      <div className="absolute top-4 right-4 z-0 opacity-10">
+        <img
+          src="/images/suwonfc-logo-watermark.png"
+          alt="수원FC"
+          className="w-20 h-20"
+        />
+      </div>
+
+      <div className="relative z-10 p-4 space-y-4">
         {/* 동영상 영역 */}
         <VideoPlayer videoUrl={song.videoUrl} />
+
+        {/* 참고사항 - 최상단으로 이동 */}
+        {song.notes && (
+          <div className="bg-suwon-blue/10 rounded-card p-5 border-2 border-suwon-blue/30">
+            <h3 className="text-h3 text-suwon-textPrimary mb-3 flex items-center gap-2">
+              <span>📝</span>
+              <span>참고사항</span>
+            </h3>
+            <p className="text-body1 text-suwon-textPrimary whitespace-pre-wrap leading-relaxed">
+              {song.notes}
+            </p>
+          </div>
+        )}
 
         {/* 가사 영역 */}
         <div className="space-y-3">
@@ -41,21 +63,6 @@ export default async function SituationDetailPage({ params }: { params: { id: st
           <div className="flex items-center gap-2 text-caption text-suwon-textSecondary">
             <span>등록일: {song.createdAt}</span>
           </div>
-
-          {/* 참고사항 */}
-          {song.notes && (
-            <div className="mt-4">
-              <h3 className="text-h3 text-suwon-textPrimary mb-2 flex items-center gap-2">
-                <span>📝</span>
-                <span>참고사항</span>
-              </h3>
-              <div className="bg-suwon-blue/5 rounded-card p-4 border border-suwon-blue/20">
-                <p className="text-body2 text-suwon-textPrimary whitespace-pre-wrap leading-relaxed">
-                  {song.notes}
-                </p>
-              </div>
-            </div>
-          )}
         </div>
       </div>
 

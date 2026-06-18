@@ -1,4 +1,4 @@
-import { Search, Flame, List, Users } from 'lucide-react';
+import { Search } from 'lucide-react';
 import Link from 'next/link';
 import Card from '@/components/common/Card';
 import { readData } from '@/lib/dataManager';
@@ -24,11 +24,15 @@ export default async function Home() {
       </Link>
 
       {/* 카테고리 바로가기 */}
-      <div className="grid grid-cols-2 gap-3 mb-5">
+      <div className="grid grid-cols-2 gap-4 mb-5">
         <Link href="/situation">
           <Card className="flex flex-col items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
             <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center mb-2">
-              <List size={24} className="text-suwon-red" />
+              <img
+                src="/images/suwonfc-logo-small.png"
+                alt="상황별 응원"
+                className="w-6 h-6"
+              />
             </div>
             <span className="text-h3 text-suwon-textPrimary">상황별 응원</span>
           </Card>
@@ -36,41 +40,43 @@ export default async function Home() {
         <Link href="/player">
           <Card className="flex flex-col items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
             <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center mb-2">
-              <Users size={24} className="text-suwon-red" />
+              <img
+                src="/images/suwonfc-logo-small.png"
+                alt="선수별 응원"
+                className="w-6 h-6"
+              />
             </div>
             <span className="text-h3 text-suwon-textPrimary">선수별 응원</span>
           </Card>
         </Link>
       </div>
 
-      {/* 오늘의 Hot 응원법 */}
+      {/* 응원가 목록 */}
       <div className="mb-5">
-        <div className="flex items-center gap-2 mb-3">
-          <Flame size={20} className="text-suwon-red" />
-          <h2 className="text-h2 text-suwon-textPrimary">오늘의 Hot 응원법</h2>
-        </div>
-        <div className="space-y-4">
-          {hotCheerSongs.map((song) => (
-            <Link key={song.id} href={`/situation/${song.id}`}>
-              <Card className="cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="px-2 py-0.5 bg-suwon-red text-suwon-textPrimary text-caption rounded-button">HOT</span>
-                      {song.tags.map((tag) => (
-                        <span key={tag} className="px-2 py-0.5 bg-suwon-blue/20 text-suwon-blue text-caption rounded-button">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    <h3 className="text-h3 text-suwon-textPrimary mb-1">{song.title}</h3>
-                    <p className="text-caption text-suwon-textSecondary">{song.createdAt}</p>
+        <h2 className="text-h2 text-suwon-textPrimary mb-3">응원가 목록</h2>
+        {hotCheerSongs.map((song, index) => (
+          <Link 
+            key={song.id} 
+            href={`/situation/${song.id}`}
+            className={`block mb-4 ${index === hotCheerSongs.length - 1 ? 'mb-0' : ''}`}
+          >
+            <Card className="cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    {song.tags.map((tag) => (
+                      <span key={tag} className="px-2 py-0.5 bg-suwon-blue/20 text-suwon-blue text-caption rounded-button">
+                        {tag}
+                      </span>
+                    ))}
                   </div>
+                  <h3 className="text-h3 text-suwon-textPrimary mb-1">{song.title}</h3>
+                  <p className="text-caption text-suwon-textSecondary">{song.createdAt}</p>
                 </div>
-              </Card>
-            </Link>
-          ))}
-        </div>
+              </div>
+            </Card>
+          </Link>
+        ))}
       </div>
     </div>
   );

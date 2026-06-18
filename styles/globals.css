@@ -15,4 +15,135 @@
   .text-shadow {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   }
+
+  /* 강조 텍스트 - 노란색 박스 */
+  .text-highlight {
+    background: linear-gradient(180deg, transparent 60%, #FFB300 60%);
+    padding: 0 4px;
+  }
+
+  /* 강조 텍스트 - 빨간색 텍스트 */
+  .text-accent {
+    color: #EB0028;
+    font-weight: 600;
+  }
+
+  /* 캡션 - 텍스트 */
+  .text-caption {
+    color: #D0D5E0;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  /* HOT 배지 */
+  .badge-hot {
+    background: linear-gradient(135deg, #EB0028, #FF3333);
+    color: #FFFFFF;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(235, 0, 40, 0.4);
+  }
+
+  /* 프라이머리 버튼 */
+  .button-primary {
+    background-color: #EB0028;
+    color: #FFFFFF;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 600;
+    font-size: 16px;
+    min-height: 48px;
+    transition: all 0.2s ease;
+  }
+
+  .button-primary:hover {
+    background-color: #C4001F;
+    transform: translateY(-2px);
+  }
+
+  .button-primary:active {
+    transform: translateY(0);
+  }
+
+  /* 세컨더리 버튼 */
+  .button-secondary {
+    background-color: transparent;
+    color: #FFFFFF;
+    border: 1px solid #0066CC;
+    border-radius: 12px;
+    padding: 12px 24px;
+    font-weight: 500;
+    font-size: 16px;
+    min-height: 48px;
+    transition: all 0.2s ease;
+  }
+
+  .button-secondary:hover {
+    background-color: rgba(0, 102, 204, 0.1);
+  }
+
+  /* 기본 카드 */
+  .card-base {
+    background-color: #1A3054;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 16px rgba(0, 57, 111, 0.15);
+    border: 1px solid rgba(0, 102, 204, 0.1);
+    transition: all 0.2s ease;
+  }
+
+  .card-base:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 57, 111, 0.25);
+  }
+
+  /* 검색 바 */
+  .search-bar {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .search-bar input {
+    background: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-size: 16px;
+    flex: 1;
+  }
+
+  .search-bar input::placeholder {
+    color: #D0D5E0;
+  }
+
+  /* 하단 고정 바 */
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(180deg, transparent, #0F1F3A 20%, #0F1F3A);
+    padding: 16px 20px;
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  /* 상단 헤더 */
+  .header {
+    background: linear-gradient(180deg, #1E3A5F 0%, #0F1F3A 100%);
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
 }

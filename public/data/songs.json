@@ -1,64 +1,24 @@
 [
   {
-    "id": "1",
-    "title": "스우파이 바보",
+    "title": "무적수원",
+    "category": "PLAYER_ENTRY",
+    "lyrics": "다시 일어나 수원FC\n\n그대가 흘린 땀방울이 헛되지 않게\n\n우렁찬 함성 소리로 (   상대팀  )을 제압 하리라\n\n하나가 되어 나아가서 승리하리라\n\n​\n\n아아 아아아 아아 아아아\n\n우리가 흘린 땀방울이 헛되지 않게\n\n찬란한 별빛 향해 승리로 비상 하리라\n\n나아가자 수원 영원하리라",
+    "videoUrl": "https://youtu.be/SH7NfV44tZY?si=n9NW9Lc4KpMDt7-m",
+    "tags": [
+      "입장"
+    ],
+    "notes": "머플러를 머리위로 들어주세요!",
+    "id": "1781708530000",
+    "createdAt": "2026.06.17"
+  },
+  {
+    "title": "이 도시의 자랑",
     "category": "GENERAL",
-    "lyrics": "스우파이 항전! (박수 2번 1)\n승리하리! (박수 2번 1)\n스우파이 항전! (박수 2번)\n승리하리! (박수 2번)",
-    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "tags": [
-      "신곡",
-      "쉬움"
-    ],
-    "createdAt": "2024.01.15",
-    "notes": ""
-  },
-  {
-    "id": "2",
-    "title": "파이팅 FC 서울",
-    "category": "GENERAL",
-    "lyrics": "파이팅 FC 서울!\n파이팅 FC 서울!\n우리의 승리는\n오직 FC 서울!",
-    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "tags": [
-      "박자주의"
-    ],
-    "createdAt": "2024.01.10",
-    "notes": "박자에 맞춰 크게 외쳐주세요!"
-  },
-  {
-    "id": "3",
-    "title": "수비 벽 세워라",
-    "category": "GENERAL",
-    "lyrics": "벽! 벽! 벽! (반복)\n수비 벽 세워라!\n우리 팀 지킨다!\n벽! 벽! 벽!",
-    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "tags": [
-      "신곡"
-    ],
-    "createdAt": "2024.01.08",
-    "notes": ""
-  },
-  {
-    "id": "4",
-    "title": "새 선수 입장 응원",
-    "category": "EXTRATIME",
-    "lyrics": "환영합니다! (박수)\n환영합니다! (박수)\n새 선수 입장!\n함께 승리!",
-    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "tags": [
-      "쉬움"
-    ],
-    "createdAt": "2024.01.05",
-    "notes": "새 선수가 교체되었을 때 함께 외쳐주세요"
-  },
-  {
-    "id": "5",
-    "title": "우승 세레머니",
-    "category": "GAMEOVER",
-    "lyrics": "우~ 승! 우~ 승!\nFC 서울! 우승!\n우~ 승! 우~ 승!\nFC 서울! 우승!",
-    "videoUrl": "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    "tags": [
-      "중요",
-      "쉬움"
-    ],
-    "createdAt": "2024.01.01",
-    "notes": "머플러를 흔들면서 불러주세요 "
+    "lyrics": "우린 이 도시의 자랑  \n오! 수원 에프씨 \n그 무엇도 걱정없이  \n다함께 싸워나가",
+    "videoUrl": "https://youtu.be/urdF14prQM0?si=TSVqu5pslmwWVGQy",
+    "tags": [],
+    "notes": "",
+    "id": "1781791740320",
+    "createdAt": "2026.06.18"
   }
 ]

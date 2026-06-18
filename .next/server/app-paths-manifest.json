@@ -1,18 +1,8 @@
 {
   "/_not-found/page": "app/_not-found/page.js",
-  "/api/data/players/route": "app/api/data/players/route.js",
-  "/api/data/songs/route": "app/api/data/songs/route.js",
   "/page": "app/page.js",
-  "/player/page": "app/player/page.js",
-  "/api/initialize-kv/route": "app/api/initialize-kv/route.js",
-  "/player/[id]/page": "app/player/[id]/page.js",
-  "/search/page": "app/search/page.js",
-  "/situation/[id]/page": "app/situation/[id]/page.js",
   "/situation/page": "app/situation/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/login/page": "app/admin/login/page.js",
-  "/admin/players/page": "app/admin/players/page.js",
-  "/admin/players/new/page": "app/admin/players/new/page.js",
-  "/admin/songs/new/page": "app/admin/songs/new/page.js",
-  "/admin/songs/page": "app/admin/songs/page.js"
+  "/situation/[id]/page": "app/situation/[id]/page.js",
+  "/admin/songs/page": "app/admin/songs/page.js",
+  "/admin/songs/new/page": "app/admin/songs/new/page.js"
 }
