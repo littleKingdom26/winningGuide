@@ -98,7 +98,7 @@ cp .env.local.example .env.local
 
 2. Redis URL 설정 (이미 제공된 URL 사용):
 ```env
-REDIS_URL="redis://default:mcLz7NNMXv7ema8GhIdCXT58qhJUfMVM@increase-taste-sagely-49830.db.redis.io:10621"
+REDIS_URL="{redisUrl}"
 ```
 
 ### 개발 서버 실행
@@ -192,8 +192,8 @@ GET /api/initialize-kv
 ## 🔧 어드민 시스템
 
 ### 접속 정보
-- **URL**: `http://localhost:3000/admin`
-- **비밀번호**: `admin123` (기본값)
+- **URL**: `http://localhost:3000`
+- **비밀번호**: `` (기본값)
 - **환경변수로 설정 가능**: `ADMIN_PASSWORD`
 
 ### 주요 기능
