@@ -131,24 +131,6 @@ export default async function Home() {
         </Link>
       )}
 
-      {/* 카테고리 바로가기 */}
-      <div className="mb-5">
-        <Link href="/situation">
-          <Card className="flex items-center justify-center py-6 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-suwon-red/20 flex items-center justify-center">
-                <img
-                  src="/images/suwonfc-logo-small.png"
-                  alt="응원가"
-                  className="w-6 h-6"
-                />
-              </div>
-              <span className="text-h3 text-suwon-textPrimary">응원가 목록</span>
-            </div>
-          </Card>
-        </Link>
-      </div>
-
       {/* 응원가 목록 */}
       <div className="mb-5">
         <h2 className="text-h2 text-suwon-textPrimary mb-3">응원가 목록</h2>
