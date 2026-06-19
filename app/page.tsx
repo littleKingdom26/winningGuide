@@ -1,13 +1,18 @@
 import { Search, BookOpen, Calendar, ExternalLink, Home as HomeIcon, Car, Clock, MapPin } from 'lucide-react';
 import Link from 'next/link';
 import Card from '@/components/common/Card';
-import { readData } from '@/lib/dataManager';
+import CurrentSongCard from '@/components/CurrentSongCard';
+import { readData, readSingleData } from '@/lib/dataManager';
 import { CheerSong, CheerGuide, GameSchedule, GameStatus, HomeAway } from '@/constants/types';
 
 export default async function Home() {
   const songs = await readData<CheerSong>('songs.json');
   const guides = await readData<CheerGuide>('cheer-guides.json');
   const schedules = await readData<GameSchedule>('game-schedules.json');
+  
+  // 현재 응원가 조회 (초기값용)
+  const currentSongData = await readSingleData<{ songId: string | null }>('current-song.json');
+  const currentSongId = currentSongData?.songId || null;
   
   const hotCheerSongs = songs.slice(0, 3);
   const featuredGuides = guides.slice(0, 2);
@@ -95,6 +100,9 @@ export default async function Home() {
           />
         </div>
       </Link>
+
+      {/* 현재 응원가 (상단 배치 - 클라이언트 컴포넌트로 폴링) */}
+      <CurrentSongCard songs={songs} initialSongId={currentSongId} />
 
       {/* 다가오는 경기 */}
       {upcomingMatch && (

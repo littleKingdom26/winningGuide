@@ -133,3 +133,76 @@ export async function writeData<T>(filename: string, data: T[]): Promise<void> {
     }
   }
 }
+
+// 단일 객체용 데이터 관리 함수
+export async function readSingleData<T>(filename: string): Promise<T | null> {
+  try {
+    const redisConnected = await checkRedisConnection();
+    const client = getRedisClient();
+    
+    if (client) {
+      try {
+        const redisData = await client.get(filename);
+        if (redisData) {
+          try {
+            const parsed = JSON.parse(redisData);
+            console.log(`📖 Read ${filename} from Redis`);
+            return parsed as T;
+          } catch (parseError) {
+            console.warn('⚠️ Failed to parse Redis data, falling back to file:', parseError);
+          }
+        }
+      } catch (redisError) {
+        console.warn('⚠️ Redis read error, falling back to file:', redisError);
+      }
+    }
+    
+    const publicPath = path.join(PUBLIC_DATA_DIR, filename);
+    const fileContent = await fs.readFile(publicPath, 'utf-8');
+    const parsedData = JSON.parse(fileContent);
+    console.log(`📖 Read ${filename} from file system`);
+    
+    if (client) {
+      try {
+        await client.set(filename, JSON.stringify(parsedData));
+        console.log(`💾 Cached ${filename} to Redis`);
+      } catch (kvError) {
+        console.warn('⚠️ Could not save to Redis:', kvError);
+      }
+    }
+    
+    return parsedData as T;
+  } catch (error) {
+    console.error(`❌ Error reading ${filename}:`, error);
+    return null;
+  }
+}
+
+export async function writeSingleData<T>(filename: string, data: T): Promise<void> {
+  try {
+    const redisConnected = await checkRedisConnection();
+    const client = getRedisClient();
+    
+    if (client) {
+      try {
+        await client.set(filename, JSON.stringify(data));
+        console.log(`💾 Saved ${filename} to Redis`);
+      } catch (redisError) {
+        console.warn('⚠️ Redis write error:', redisError);
+      }
+    }
+    
+    const publicPath = path.join(PUBLIC_DATA_DIR, filename);
+    await fs.writeFile(publicPath, JSON.stringify(data, null, 2), 'utf-8');
+    console.log(`💾 Saved ${filename} to file system`);
+  } catch (error) {
+    const fsError = error as NodeJS.ErrnoException;
+    
+    if (fsError.code === 'EROFS' || fsError.code === 'EACCES') {
+      console.warn(`⚠️ Could not write to file system, but data is saved in Redis`);
+    } else {
+      console.error(`❌ Error writing ${filename}:`, error);
+      throw error;
+    }
+  }
+}

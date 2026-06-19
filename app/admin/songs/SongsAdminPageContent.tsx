@@ -1,11 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Search, Filter, Star } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Button from '@/components/common/Button';
-import { getSongs, deleteSong } from '../actions';
+import { getSongs, deleteSong, getCurrentSongId, setCurrentSong } from '../actions';
 import { CheerSong } from '@/constants/types';
 import { categoryNames } from '@/constants/mockData';
 
@@ -14,6 +14,7 @@ export default function SongsAdminPageContent() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterCategory, setFilterCategory] = useState<string>('ALL');
+  const [currentSongId, setCurrentSongIdState] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const editId = searchParams.get('edit');
@@ -32,6 +33,8 @@ export default function SongsAdminPageContent() {
     try {
       const data = await getSongs();
       setSongs(data);
+      const curId = await getCurrentSongId();
+      setCurrentSongIdState(curId);
     } catch (error) {
       console.error('Error loading songs:', error);
     } finally {
@@ -43,11 +46,28 @@ export default function SongsAdminPageContent() {
     if (confirm(`"${title}" 응원가를 삭제하시겠습니까?`)) {
       try {
         await deleteSong(id);
+        // 삭제된 곡이 현재 응원가인 경우 선택 해제
+        if (currentSongId === id) {
+          await setCurrentSong(null);
+          setCurrentSongIdState(null);
+        }
         await loadSongs();
       } catch (error) {
         console.error('Error deleting song:', error);
         alert('삭제 중 오류가 발생했습니다.');
       }
+    }
+  };
+
+  const handleSetCurrent = async (id: string) => {
+    try {
+      // 이미 선택된 곡이면 해제, 아니면 새로 설정 (단일 선택)
+      const newId = currentSongId === id ? null : id;
+      await setCurrentSong(newId);
+      setCurrentSongIdState(newId);
+    } catch (error) {
+      console.error('Error setting current song:', error);
+      alert('현재 응원가 설정 중 오류가 발생했습니다.');
     }
   };
 
@@ -83,6 +103,17 @@ export default function SongsAdminPageContent() {
         </Link>
       </div>
 
+      {/* 현재 응원가 안내 */}
+      <div className="bg-suwon-red/10 border border-suwon-red/30 rounded-card p-4 flex items-center gap-3">
+        <Star size={20} className="text-suwon-red fill-suwon-red" />
+        <p className="text-body2 text-suwon-textPrimary">
+          {currentSongId 
+            ? `현재 응원가: ${songs.find(s => s.id === currentSongId)?.title || '알 수 없음'}`
+            : '현재 선택된 응원가가 없습니다. 별 아이콘을 눌러 프론트에 노출할 응원가를 선택하세요.'
+          }
+        </p>
+      </div>
+
       {/* 검색 및 필터 */}
       <div className="flex gap-4">
         <div className="flex-1 relative">
@@ -112,56 +143,71 @@ export default function SongsAdminPageContent() {
 
       {/* 응원가 목록 */}
       <div className="space-y-3">
-        {filteredSongs.map((song) => (
-          <div
-            key={song.id}
-            className="bg-suwon-cardDark rounded-card p-6 border-l-4 border-suwon-red/80 hover:border-suwon-red transition-all"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="px-2 py-0.5 bg-suwon-red/20 text-suwon-red text-caption rounded-button font-bold">
-                    {categoryNames[song.category as keyof typeof categoryNames]}
-                  </span>
+        {filteredSongs.map((song) => {
+          const isCurrent = currentSongId === song.id;
+          return (
+            <div
+              key={song.id}
+              className={`bg-suwon-cardDark rounded-card p-6 border-l-4 transition-all ${
+                isCurrent 
+                  ? 'border-suwon-red bg-suwon-red/5 shadow-lg shadow-suwon-red/20' 
+                  : 'border-suwon-red/80 hover:border-suwon-red'
+              }`}
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="px-2 py-0.5 bg-suwon-red/20 text-suwon-red text-caption rounded-button font-bold">
+                      {categoryNames[song.category as keyof typeof categoryNames]}
+                    </span>
+                    {isCurrent && (
+                      <span className="px-2 py-0.5 bg-suwon-red text-white text-caption rounded-button font-bold">
+                        현재 응원가
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-h3 text-suwon-textPrimary mb-2">{song.title}</h3>
+                  <p className="text-caption text-suwon-textSecondary">등록일: {song.createdAt}</p>
                 </div>
-                <h3 className="text-h3 text-suwon-textPrimary mb-2">{song.title}</h3>
-                <p className="text-caption text-suwon-textSecondary">등록일: {song.createdAt}</p>
-              </div>
-              <div className="flex gap-2">
-                <Link href={`/admin/songs/new?edit=${song.id}`}>
-                  <Button variant="outline" size="sm" title="수정">
-                    <Edit size={16} />
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleSetCurrent(song.id)}
+                    title={isCurrent ? "현재 응원가 해제" : "현재 응원가로 설정"}
+                    className={isCurrent 
+                      ? "border-suwon-red text-suwon-red bg-suwon-red/10" 
+                      : "border-suwon-textSecondary/30 text-suwon-textSecondary hover:text-suwon-red hover:border-suwon-red"
+                    }
+                  >
+                    <Star size={16} className={isCurrent ? "fill-suwon-red" : ""} />
                   </Button>
-                </Link>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleDelete(song.id, song.title)}
-                  className="border-red-500/30 text-red-500 hover:bg-red-500/10"
-                  title="삭제"
-                >
-                  <Trash2 size={16} />
-                </Button>
+                  <Link href={`/admin/songs/new?edit=${song.id}`}>
+                    <Button variant="outline" size="sm" title="수정">
+                      <Edit size={16} />
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleDelete(song.id, song.title)}
+                    className="border-red-500/30 text-red-500 hover:bg-red-500/10"
+                    title="삭제"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {filteredSongs.length === 0 && (
           <div className="text-center py-12">
-            <Music size={48} className="mx-auto mb-4 text-suwon-textSecondary/30" />
             <p className="text-body2 text-suwon-textSecondary">검색 결과가 없습니다.</p>
           </div>
         )}
       </div>
     </div>
   );
-}
-
-function Music({ size, className }: { size: number; className: string }) {
-  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M9 18V5l12-2v13"></path>
-    <circle cx="6" cy="18" r="3"></circle>
-    <circle cx="18" cy="16" r="3"></circle>
-  </svg>;
 }

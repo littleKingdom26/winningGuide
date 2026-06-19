@@ -1,6 +1,6 @@
 'use server';
 
-import { readData, writeData } from '@/lib/dataManager';
+import { readData, writeData, readSingleData, writeSingleData } from '@/lib/dataManager';
 import { CheerSong, PlayerProfile, CheerGuide, GameSchedule, GoogleCalendarConfig } from '@/constants/types';
 import { revalidatePath } from 'next/cache';
 
@@ -64,6 +64,22 @@ export async function deleteSong(id: string): Promise<void> {
     revalidatePath('/admin/songs');
     revalidatePath('/');
     revalidatePath('/situation');
+  } catch (error) {
+    console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
+  }
+}
+
+// 현재 응원가 관리 Actions
+export async function getCurrentSongId(): Promise<string | null> {
+  const data = await readSingleData<{ songId: string | null }>('current-song.json');
+  return data?.songId || null;
+}
+
+export async function setCurrentSong(songId: string | null): Promise<void> {
+  try {
+    await writeSingleData('current-song.json', { songId });
+    revalidatePath('/admin/songs');
+    revalidatePath('/');
   } catch (error) {
     console.error('Warning: Could not persist data. Changes will not be saved after reload.', error);
   }
