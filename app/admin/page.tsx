@@ -4,18 +4,12 @@ import Link from 'next/link';
 import Button from '@/components/common/Button';
 import { readData } from '@/lib/dataManager';
 import { CheerGuide, GameSchedule } from '@/constants/types';
+import { categoryNames } from '@/constants/mockData';
 
 export default async function AdminDashboard() {
   const stats = await getStats();
   const guides = await readData<CheerGuide>('cheer-guides.json');
   const schedules = await readData<GameSchedule>('game-schedules.json');
-
-  const categoryNames = {
-    GOAL: '득점',
-    GAMEOVER: '경기종료',
-    EXTRATIME: '추가시간',
-    GENERAL: '일반',
-  };
 
   return (
     <div className="space-y-6">

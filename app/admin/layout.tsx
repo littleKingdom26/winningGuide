@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, LayoutDashboard, Music, Users, Home } from 'lucide-react';
+import { LogOut, LayoutDashboard, Music, Users, Home, BookOpen, Calendar } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -26,6 +26,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { icon: LayoutDashboard, label: '대시보드', path: '/admin' },
     { icon: Music, label: '응원가 관리', path: '/admin/songs' },
     { icon: Users, label: '선수 관리', path: '/admin/players' },
+    { icon: BookOpen, label: '응원팁', path: '/admin/cheer-guides' },
+    { icon: Calendar, label: '경기일정', path: '/admin/game-schedules' },
   ];
 
   if (pathname === '/admin/login') {
@@ -38,9 +40,16 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <h1 className="text-h1 text-suwon-textPrimary font-bold">수원FC 어드민</h1>
+            <Link 
+              href="/" 
+              className="text-caption text-suwon-textSecondary hover:text-suwon-red transition-colors border-l border-suwon-textSecondary/30 pl-4"
+              title="프론트 홈으로 이동"
+            >
+              직관 응원 가이드
+            </Link>
           </div>
           <div className="flex items-center gap-4">
-            <Link href="/">
+            <Link href="/admin" title="어드민 홈">
               <Home size={20} className="text-suwon-textPrimary cursor-pointer hover:text-suwon-red transition-colors" />
             </Link>
             <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-2 bg-suwon-cardDark rounded-button hover:bg-suwon-red/20 transition-colors">
@@ -61,14 +70,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                 <Link
                   key={item.path}
                   href={item.path}
-                  className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-colors ${
+                  title={item.label}
+                  className={`flex items-center justify-center px-5 py-3 border-b-2 transition-colors ${
                     isActive
                       ? 'border-suwon-red text-suwon-red bg-suwon-red/10'
                       : 'border-transparent text-suwon-textSecondary hover:text-suwon-textPrimary hover:bg-suwon-red/5'
                   }`}
                 >
-                  <Icon size={18} />
-                  <span className="text-body2">{item.label}</span>
+                  <Icon size={20} />
                 </Link>
               );
             })}

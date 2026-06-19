@@ -78,7 +78,7 @@ export default function SongsAdminPageContent() {
         <Link href="/admin/songs/new">
           <Button variant="primary" size="lg">
             <Plus size={20} className="mr-2" />
-            새 응원가 등록
+            응원가 등록
           </Button>
         </Link>
       </div>
@@ -102,7 +102,7 @@ export default function SongsAdminPageContent() {
             onChange={(e) => setFilterCategory(e.target.value)}
             className="h-12 pl-12 pr-10 bg-suwon-navy/50 border border-suwon-red/30 rounded-button text-suwon-textPrimary focus:outline-none focus:border-suwon-red appearance-none cursor-pointer"
           >
-            <option value="ALL">전체 카테고리</option>
+            <option value="ALL">전체</option>
             {Object.entries(categoryNames).map(([key, name]) => (
               <option key={key} value={key}>{name}</option>
             ))}
@@ -123,21 +123,14 @@ export default function SongsAdminPageContent() {
                   <span className="px-2 py-0.5 bg-suwon-red/20 text-suwon-red text-caption rounded-button font-bold">
                     {categoryNames[song.category as keyof typeof categoryNames]}
                   </span>
-                  {song.tags.map((tag) => (
-                    <span key={tag} className="px-2 py-0.5 bg-suwon-red/10 text-suwon-red text-caption rounded-button border border-suwon-red/30">
-                      {tag}
-                    </span>
-                  ))}
                 </div>
                 <h3 className="text-h3 text-suwon-textPrimary mb-2">{song.title}</h3>
-                <p className="text-body2 text-suwon-textSecondary line-clamp-2 mb-2">{song.lyrics}</p>
                 <p className="text-caption text-suwon-textSecondary">등록일: {song.createdAt}</p>
               </div>
               <div className="flex gap-2">
                 <Link href={`/admin/songs/new?edit=${song.id}`}>
-                  <Button variant="outline" size="sm">
-                    <Edit size={16} className="mr-1" />
-                    수정
+                  <Button variant="outline" size="sm" title="수정">
+                    <Edit size={16} />
                   </Button>
                 </Link>
                 <Button
@@ -145,9 +138,9 @@ export default function SongsAdminPageContent() {
                   size="sm"
                   onClick={() => handleDelete(song.id, song.title)}
                   className="border-red-500/30 text-red-500 hover:bg-red-500/10"
+                  title="삭제"
                 >
-                  <Trash2 size={16} className="mr-1" />
-                  삭제
+                  <Trash2 size={16} />
                 </Button>
               </div>
             </div>
