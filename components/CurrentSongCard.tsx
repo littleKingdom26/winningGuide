@@ -72,7 +72,7 @@ export default function CurrentSongCard({ songs, initialSongId }: CurrentSongCar
     }
   }, [toastMessage]);
 
-  // 30초마다 폴링하여 현재 응원가 확인 (탭이 비활성화되면 중지)
+  // 20초마다 폴링하여 현재 응원가 확인 (탭이 비활성화되면 중지)
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
 
@@ -88,8 +88,11 @@ export default function CurrentSongCard({ songs, initialSongId }: CurrentSongCar
         
         // 변경된 경우에만 상태 업데이트 (부드러운 전환)
         if (newSongId !== currentSongId) {
+          console.log('[CurrentSongCard] 변경 감지:', { from: currentSongId, to: newSongId, isFirst: isFirstRender.current });
+          
           // 초기 로드가 아닌 실제 변경인 경우 알림
           if (!isFirstRender.current) {
+            console.log('[CurrentSongCard] 알림 트리거 실행');
             triggerNotification();
             const newSong = newSongId ? songs.find(s => s.id === newSongId) : null;
             setToastMessage(
@@ -98,7 +101,6 @@ export default function CurrentSongCard({ songs, initialSongId }: CurrentSongCar
                 : '🔇 현재 응원가가 종료되었습니다'
             );
           }
-          isFirstRender.current = false;
 
           setIsTransitioning(true);
           setTimeout(() => {
@@ -106,6 +108,9 @@ export default function CurrentSongCard({ songs, initialSongId }: CurrentSongCar
             setIsTransitioning(false);
           }, 300);
         }
+        
+        // 첫 폴링 완료 표시 (변경 여부와 무관하게 처리)
+        isFirstRender.current = false;
       } catch (error) {
         console.error('Polling error:', error);
       }
@@ -113,7 +118,7 @@ export default function CurrentSongCard({ songs, initialSongId }: CurrentSongCar
 
     const startPolling = () => {
       clearInterval(interval);
-      interval = setInterval(pollCurrentSong, 30000);
+      interval = setInterval(pollCurrentSong, 20000);
     };
 
     const handleVisibility = () => {
@@ -128,8 +133,9 @@ export default function CurrentSongCard({ songs, initialSongId }: CurrentSongCar
 
     document.addEventListener('visibilitychange', handleVisibility);
 
-    // 탭이 보이고 있을 때만 폴링 시작
+    // 탭이 보이고 있을 때만 폴링 시작 (즉시 첫 체크 실행)
     if (!document.hidden) {
+      pollCurrentSong();
       startPolling();
     }
 
