@@ -48,7 +48,6 @@ export default async function MatchSchedulePage() {
       return (
         <div className="flex items-center gap-2">
           <Home className="w-5 h-5 text-suwon-red" />
-          <span className="text-body2 text-suwon-textPrimary">vs</span>
           <span className="text-body1 text-suwon-textPrimary font-bold">{opponent}</span>
         </div>
       );
@@ -56,11 +55,19 @@ export default async function MatchSchedulePage() {
       return (
         <div className="flex items-center gap-2">
           <Car className="w-5 h-5 text-suwon-blue" />
-          <span className="text-body2 text-suwon-textPrimary">@</span>
           <span className="text-body1 text-suwon-textPrimary font-bold">{opponent}</span>
         </div>
       );
     }
+  };
+
+  // 상대팀명 추출 (라운드/대회명 제거)
+  const extractOpponentName = (opponent: string): string => {
+    // 라운드 패턴 제거 (13R, 1R, 2R 등)
+    let cleaned = opponent.replace(/^\d+R\s*/, '');
+    // 대회명 패턴 제거 (코라이컵, w 코리아컵, FA컵 등)
+    cleaned = cleaned.replace(/^(?:w\s*)?(?:코라이컵|FA컵|한국은행컵)\s*/i, '');
+    return cleaned.trim();
   };
 
   // 날짜 포맷팅
@@ -77,6 +84,11 @@ export default async function MatchSchedulePage() {
   const upcomingMatch = sortedSchedules.find(s => new Date(s.date) >= now);
   const pastMatches = sortedSchedules.filter(s => new Date(s.date) < now);
 
+  // 미래 경기만 필터링하고 날짜순 정렬
+  const futureSchedules = sortedSchedules
+    .filter(s => new Date(s.date) >= now)
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
   // 구글 캘린더 연동 함수
   const getGoogleCalendarUrl = (schedule: GameSchedule) => {
     const startDate = schedule.date.replace(/-/g, '') + 'T' + schedule.time.replace(/:/g, '') + '00';
@@ -92,16 +104,6 @@ export default async function MatchSchedulePage() {
     
     return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&location=${location}`;
   };
-
-  // 캘린더별 그룹화
-  const groupedByCalendar = sortedSchedules.reduce((acc: Record<string, GameSchedule[]>, schedule) => {
-    const calendarName = schedule.calendarName || '기타';
-    if (!acc[calendarName]) {
-      acc[calendarName] = [];
-    }
-    acc[calendarName].push(schedule);
-    return acc;
-  }, {});
 
   return (
     <div className="p-4 space-y-6 pb-20">
@@ -122,75 +124,55 @@ export default async function MatchSchedulePage() {
         </Card>
       )}
 
-      {/* 캘린더별 일정 */}
-      {Object.entries(groupedByCalendar).map(([calendarName, calendarSchedules]) => {
-        // 미래 경기만 필터링하고 날짜순 정렬
-        const futureSchedules = calendarSchedules
-          .filter(s => new Date(s.date) >= now)
-          .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
-
-        if (futureSchedules.length === 0) return null;
-
-        return (
-          <div key={calendarName} className="space-y-4">
-            {/* 캘린더 헤더 */}
-            <div className="flex items-center gap-2 mb-3">
-              <Calendar className="w-5 h-5 text-suwon-blue" />
-              <h2 className="text-h2 text-suwon-textPrimary font-bold">{calendarName}</h2>
-            </div>
-
-            {/* 미래 경기들 */}
-            <div className="space-y-3">
-              {futureSchedules.map((schedule) => (
-                <Card key={schedule.id} className="p-5 border-2 border-suwon-red/30">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      {schedule.round && (
-                        <span className="inline-block px-2 py-1 bg-suwon-red/20 text-suwon-red text-caption rounded-button mb-2">
-                          {schedule.round}
-                        </span>
-                      )}
-                      <div className="mb-3">
-                        {getHomeAwayDisplay(schedule.homeAway, schedule.opponent)}
-                      </div>
-                    </div>
-                    {getStatusDisplay(schedule.status, schedule.homeScore, schedule.awayScore)}
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
-                      <Clock className="w-4 h-4" />
-                      <span>{formatDate(schedule.date)} {schedule.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
-                      <MapPin className="w-4 h-4" />
-                      <span>{schedule.venue}</span>
-                    </div>
-                    {schedule.weather && (
-                      <div className="text-caption text-suwon-textSecondary">
-                        날씨: {schedule.weather}
-                      </div>
+      {/* 미래 경기들 */}
+      {futureSchedules.length > 0 && (
+        <div className="space-y-3">
+          {futureSchedules.map((schedule) => (
+            <Card key={schedule.id} className="p-5 border-2 border-suwon-red/30">
+              <div className="flex justify-between items-start mb-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 mb-3">
+                    {getHomeAwayDisplay(schedule.homeAway, extractOpponentName(schedule.opponent))}
+                    {schedule.calendarName && (
+                      <span className="text-caption text-suwon-textSecondary">· {schedule.calendarName}</span>
                     )}
                   </div>
+                </div>
+                {getStatusDisplay(schedule.status, schedule.homeScore, schedule.awayScore)}
+              </div>
+              
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                  <Clock className="w-4 h-4" />
+                  <span>{formatDate(schedule.date)} {schedule.time}</span>
+                </div>
+                <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                  <MapPin className="w-4 h-4" />
+                  <span>{schedule.venue}</span>
+                </div>
+                {schedule.weather && (
+                  <div className="text-caption text-suwon-textSecondary">
+                    날씨: {schedule.weather}
+                  </div>
+                )}
+              </div>
 
-                  <Link 
-                    href={getGoogleCalendarUrl(schedule)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <div className="flex items-center justify-center gap-2 py-2 px-4 bg-suwon-blue/20 text-suwon-blue rounded-button cursor-pointer hover:bg-suwon-blue/30 transition-colors">
-                      <Calendar className="w-4 h-4" />
-                      <span className="text-body2 font-bold">캘린더에 추가</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </div>
-                  </Link>
-                </Card>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+              <Link 
+                href={getGoogleCalendarUrl(schedule)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <div className="flex items-center justify-center gap-2 py-2 px-4 bg-suwon-blue/20 text-suwon-blue rounded-button cursor-pointer hover:bg-suwon-blue/30 transition-colors">
+                  <Calendar className="w-4 h-4" />
+                  <span className="text-body2 font-bold">캘린더에 추가</span>
+                  <ExternalLink className="w-4 h-4" />
+                </div>
+              </Link>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -1,10 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/page": "app/page.js",
   "/match-schedule/page": "app/match-schedule/page.js",
-  "/api/admin/calendars/route": "app/api/admin/calendars/route.js",
-  "/api/data/game-schedules/route": "app/api/data/game-schedules/route.js",
-  "/api/admin/calendars/sync/route": "app/api/admin/calendars/sync/route.js",
-  "/api/admin/calendars/[id]/route": "app/api/admin/calendars/[id]/route.js",
+  "/page": "app/page.js",
+  "/cheer-guide/page": "app/cheer-guide/page.js",
   "/admin/game-schedules/page": "app/admin/game-schedules/page.js"
 }
