@@ -24,10 +24,7 @@ export default async function SituationDetailPage({ params }: { params: { id: st
       </div>
 
       <div className="relative z-10 p-4 space-y-4">
-        {/* 동영상 영역 */}
-        <VideoPlayer videoUrl={song.videoUrl} />
-
-        {/* 참고사항 - 최상단으로 이동 */}
+        {/* 1. 참고사항 - 최상단 */}
         {song.notes && (
           <div className="bg-suwon-blue/10 rounded-card p-5 border-2 border-suwon-blue/30">
             <h3 className="text-h3 text-suwon-textPrimary mb-3 flex items-center gap-2">
@@ -40,7 +37,7 @@ export default async function SituationDetailPage({ params }: { params: { id: st
           </div>
         )}
 
-        {/* 가사 영역 */}
+        {/* 2. 가사 영역 */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h1 className="text-h1 text-suwon-textPrimary">{song.title}</h1>
@@ -64,6 +61,9 @@ export default async function SituationDetailPage({ params }: { params: { id: st
             <span>등록일: {song.createdAt}</span>
           </div>
         </div>
+
+        {/* 3. 동영상 영역 - 최하단 */}
+        <VideoPlayer videoUrl={song.videoUrl} />
       </div>
 
       {/* 하단 고정 바 */}
