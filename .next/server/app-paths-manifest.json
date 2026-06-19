@@ -1,8 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
+  "/match-schedule/page": "app/match-schedule/page.js",
   "/page": "app/page.js",
-  "/situation/page": "app/situation/page.js",
-  "/situation/[id]/page": "app/situation/[id]/page.js",
-  "/admin/songs/page": "app/admin/songs/page.js",
-  "/admin/songs/new/page": "app/admin/songs/new/page.js"
+  "/cheer-guide/page": "app/cheer-guide/page.js",
+  "/admin/game-schedules/page": "app/admin/game-schedules/page.js"
 }
