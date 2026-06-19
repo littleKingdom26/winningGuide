@@ -67,9 +67,9 @@ export function convertToGameSchedule(
     } else if (titleLower.includes('vs')) {
       const parts = event.title.split(/vs|VS/);
       if (parts.length >= 2) {
-        // 첫 번째 부분이 수원FC면 홈, 아니면 홈으로 가정
+        // 첫 번째 부분이 수원FC 또는 수원FC 위민이면 홈, 아니면 원정
         const firstPart = parts[0].trim();
-        if (firstPart.includes('수원')) {
+        if (firstPart.includes('수원FC') || firstPart.includes('수원FC 위민')) {
           opponent = parts[1].trim();
           homeAway = 'home';
         } else {

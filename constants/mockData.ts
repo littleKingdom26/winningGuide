@@ -84,8 +84,9 @@ export const mockPlayers: PlayerProfile[] = [
 ];
 
 export const categoryNames = {
-  GOAL: '득점',
-  GAMEOVER: '경기종료',
+  KICKOFF: '킥오프',
+  GOAL: '득점후',
+  GAMEOVER: '승리경기종료후',
   EXTRATIME: '추가시간',
   GENERAL: '일반',
   PLAYER_ENTRY: '선수단 입장',

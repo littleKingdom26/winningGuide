@@ -26,7 +26,7 @@ export default async function SituationPage() {
           <h2 className="text-h2 text-suwon-textPrimary mb-3">{categoryNames[category as keyof typeof categoryNames]}</h2>
           <div className="space-y-4">
             {songs.map((song) => (
-              <Link key={song.id} href={`/situation/${song.id}`}>
+              <Link key={song.id} href={`/situation/${song.id}`} className="block mb-4">
                 <Card className="cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">

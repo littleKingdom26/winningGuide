@@ -1,12 +1,11 @@
 [
   {
     "title": "무적수원",
-    "category": "PLAYER_ENTRY",
+    "category": "GENERAL",
     "lyrics": "다시 일어나 수원FC\n그대가 흘린 땀방울이 헛되지 않게\n우렁찬 함성 소리로 (상대팀) 을 제압 하리라\n하나가 되어 나아가서 승리하리라\n\n아아 아아아 아아 아아아\n우리가 흘린 땀방울이 헛되지 않게\n찬란한 별빛 향해 승리로 비상 하리라\n나아가자 수원 영원하리라",
     "videoUrl": "https://youtu.be/SH7NfV44tZY?si=n9NW9Lc4KpMDt7-m",
     "tags": [
-      "선수단 입장",
-      "웅장하게"
+      "킥오프"
     ],
     "notes": "머플러를 머리위로 들어주세요!",
     "id": "1781708530000",
@@ -21,5 +20,101 @@
     "notes": "",
     "id": "1781791740320",
     "createdAt": "2026.06.18"
+  },
+  {
+    "title": "우리의 승리를 위해",
+    "category": "GENERAL",
+    "lyrics": "승리~ 하라~ 최강 수원FC~\n우리의 승리를 위해~ 노래 부르리라~\n\n승리~ 하라~ 최강 수원FC~\n우리의 승리를 위해~ 노래 부르리라~",
+    "videoUrl": "https://youtu.be/Q5k4FITYfiU?si=mK94U_MAY5cYdNtQ",
+    "tags": [],
+    "notes": "",
+    "id": "1781851189579",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "캡틴 응원가",
+    "category": "GENERAL",
+    "lyrics": "오오오 오오 오오오 오오 \n수원의 캡틴 (주장이름)! 너를 노래",
+    "videoUrl": "https://youtu.be/qYMuMKH5B_o?si=IQqpDE1PnCjBFse8",
+    "tags": [
+      "주장"
+    ],
+    "notes": "",
+    "id": "1781852248147",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "골키퍼 콜",
+    "category": "GENERAL",
+    "lyrics": "수원의 빛이 되어줘~ 수원의 (골키퍼 이름)\n골문을 지켜줘 언제나 우리는\n널 원~하~잖~아 널 보고 있으면\n아무 걱정도 없어 수원의 빛이 되어줘~",
+    "videoUrl": "https://youtu.be/UWuQuXWdvgE?si=onhquxOg-eH5zHoo",
+    "tags": [
+      "골키퍼"
+    ],
+    "notes": "",
+    "id": "1781852350829",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "수원의 전사",
+    "category": "GENERAL",
+    "lyrics": "붉은색과 푸른색 수원의 전사여\n자 가자 오늘도 승리를 향해서\n붉은색과 푸른색 수원의 전사여\n난 오늘도 너의 뒤에서 널 위해 노래해",
+    "videoUrl": "https://youtu.be/ONt6ggQUpSU?si=KsDrYEUbADVAzufm",
+    "tags": [],
+    "notes": "",
+    "id": "1781852673962",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "수원의 자랑",
+    "category": "PLAYER_ENTRY",
+    "lyrics": "수원의 자랑 오오~ 수원FC 오오~\n수원의 자랑 오오~ 수원FC~",
+    "videoUrl": "https://youtu.be/DPyBB_3Oacc?si=YNb3-MHrBIVsw1FJ",
+    "tags": [],
+    "notes": "머플러를 높게 들어주세요",
+    "id": "1781852847178",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "전진하라",
+    "category": "GENERAL",
+    "lyrics": "전진하라 수원\n오수원FC\n우린 언제나 승리 하리라",
+    "videoUrl": "https://youtu.be/U3Vv9kBsxvg?si=aGJFULFoeNMSNxGi",
+    "tags": [],
+    "notes": "",
+    "id": "1781853416429",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "마지막 휘슬",
+    "category": "EXTRATIME",
+    "lyrics": "알레 알레 알레 수원FC\n마지막 휘슬이 울릴 때까지 달려 수원FC\n알레 오 수원FC\n라라 랄라라랄라 \n오 끝까지 달려서 \n승리하라 내 수원\n알레 알레 알레 수원FC\n마지막 휘슬이 울릴 때까지\n달려 수원FC",
+    "videoUrl": "https://youtu.be/GzNW1tkM7pI?si=BKlvKUeE3vlVtHsQ",
+    "tags": [],
+    "notes": "",
+    "id": "1781853617995",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "승리만을 안겨주는 너",
+    "category": "VICTORY",
+    "lyrics": "(상대팀) 보다 좋은 팀은 어디에도 없을걸\n수원에게 승리만을 안겨주는 너\n\n랄라랄라 랄랄랄라 랄라랄라 랄랄라\n랄라랄라 랄랄랄라 랄랄랄랄라",
+    "videoUrl": "https://youtu.be/DXysh7UxRho?si=QG0GXgYavBKTbSes",
+    "tags": [],
+    "notes": "",
+    "id": "1781853885859",
+    "createdAt": "2026.06.19"
+  },
+  {
+    "title": "골! 골! 수원FC!",
+    "category": "SETPIECE",
+    "lyrics": "골! 골! 수원FC!",
+    "videoUrl": "https://youtu.be/_qWMoGkIjWQ?si=5Jvn3cpZxfDs2JF5",
+    "tags": [
+      "득점찬스"
+    ],
+    "notes": "",
+    "id": "1781853941868",
+    "createdAt": "2026.06.19"
   }
 ]

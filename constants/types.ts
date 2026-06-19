@@ -1,4 +1,4 @@
-export type CheerCategory = 'GOAL' | 'GAMEOVER' | 'EXTRATIME' | 'GENERAL' | 'PLAYER_ENTRY' | 'VICTORY' | 'SETPIECE';
+export type CheerCategory = 'GOAL' | 'GAMEOVER' | 'EXTRATIME' | 'GENERAL' | 'PLAYER_ENTRY' | 'VICTORY' | 'SETPIECE' | 'KICKOFF';
 
 export interface CheerSong {
   id: string;
