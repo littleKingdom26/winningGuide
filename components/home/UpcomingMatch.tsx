@@ -23,6 +23,56 @@ export default function UpcomingMatch({ schedules, calendars }: UpcomingMatchPro
     ? schedules.filter(s => s.calendarId === selectedCalendar)
     : schedules;
 
+  // 캘린더별 카드 전체 테마 스타일 반환
+  const getCardThemeClass = (scheduleCalendarId?: string) => {
+    // 캘린더 필터와 동일한 rounded-button 사용 (12px)
+    const rounded = 'rounded-button';
+    
+    // 전체 선택이거나 특정 캘린더 선택 시 해당 캘린더 색상 사용
+    const targetCalendarId = selectedCalendar || scheduleCalendarId;
+    
+    if (!targetCalendarId) {
+      return {
+        border: 'border-suwon-red/30',
+        shadow: 'shadow-lg shadow-suwon-red/20',
+        bg: 'bg-suwon-red/5',
+        hoverBg: 'hover:bg-suwon-red/15',
+        activeBg: 'active:bg-suwon-red/25',
+        rounded
+      };
+    }
+    
+    const index = calendars.findIndex(c => c.id === targetCalendarId);
+    if (index === 0) {
+      return {
+        border: 'border-suwon-red',
+        shadow: 'shadow-lg shadow-suwon-red/40',
+        bg: 'bg-suwon-red/10',
+        hoverBg: 'hover:bg-suwon-red/20',
+        activeBg: 'active:bg-suwon-red/30',
+        rounded
+      };
+    } else if (index === 1) {
+      return {
+        border: 'border-suwon-blue',
+        shadow: 'shadow-lg shadow-suwon-blue/40',
+        bg: 'bg-suwon-blue/10',
+        hoverBg: 'hover:bg-suwon-blue/20',
+        activeBg: 'active:bg-suwon-blue/30',
+        rounded
+      };
+    } else {
+      return {
+        border: 'border-suwon-red',
+        shadow: 'shadow-lg shadow-suwon-red/40',
+        bg: 'bg-suwon-red/10',
+        hoverBg: 'hover:bg-suwon-red/20',
+        activeBg: 'active:bg-suwon-red/30',
+        rounded
+      };
+    }
+  };
+
   // 다가오는 경기 찾기
   const upcomingMatch = filteredSchedules
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
@@ -108,6 +158,11 @@ export default function UpcomingMatch({ schedules, calendars }: UpcomingMatchPro
     return cleaned.trim();
   };
 
+  // POI 추출 함수 (장소 이름만)
+  const extractPoi = (venue: string): string => {
+    return venue.split(',')[0].trim();
+  };
+
   // 날짜 포맷팅 함수
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
@@ -133,12 +188,15 @@ export default function UpcomingMatch({ schedules, calendars }: UpcomingMatchPro
         />
       )}
 
-      <Link href="/match-schedule" className="block">
-        <Card className="p-4 border-2 border-suwon-red/30 cursor-pointer hover:bg-suwon-cardDark/80 transition-colors">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 bg-suwon-red rounded-full animate-pulse" />
-            <h2 className="text-h2 text-suwon-textPrimary font-bold">다가오는 경기</h2>
-          </div>
+      {(() => {
+        const theme = getCardThemeClass(upcomingMatch.calendarId);
+        return (
+          <Link href="/match-schedule" className="block">
+            <Card className={`p-4 border-2 transition-all duration-300 cursor-pointer ${theme.border} ${theme.shadow} ${theme.bg} ${theme.hoverBg} ${theme.activeBg} ${theme.rounded}`}>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="w-2 h-2 bg-suwon-red rounded-full animate-pulse" />
+                <h2 className="text-h2 text-suwon-textPrimary font-bold">다가오는 경기</h2>
+              </div>
           <div className="flex justify-between items-start mb-3">
             <div className="flex-1">
               <div className="mb-1">
@@ -150,18 +208,20 @@ export default function UpcomingMatch({ schedules, calendars }: UpcomingMatchPro
             </div>
             {getStatusDisplay(upcomingMatch.status, upcomingMatch.homeScore, upcomingMatch.awayScore)}
           </div>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
-              <Clock className="w-4 h-4" />
-              <span>{formatDate(upcomingMatch.date)} {upcomingMatch.time}</span>
-            </div>
-            <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
-              <MapPin className="w-4 h-4" />
-              <span>{upcomingMatch.venue}</span>
-            </div>
-          </div>
-        </Card>
-      </Link>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                  <Clock className="w-4 h-4" />
+                  <span>{formatDate(upcomingMatch.date)} {upcomingMatch.time}</span>
+                </div>
+                <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                  <MapPin className="w-4 h-4" />
+                  <span>{extractPoi(upcomingMatch.venue)}</span>
+                </div>
+              </div>
+            </Card>
+          </Link>
+        );
+      })()}
     </div>
   );
 }

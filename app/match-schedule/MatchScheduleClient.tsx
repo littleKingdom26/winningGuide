@@ -21,6 +21,56 @@ export default function MatchScheduleClient({
     ? schedules.filter(s => s.calendarId === selectedCalendar)
     : schedules;
 
+  // 캘린더별 카드 전체 테마 스타일 반환
+  const getCardThemeClass = (scheduleCalendarId?: string) => {
+    // 캘린더 필터와 동일한 rounded-button 사용 (12px)
+    const rounded = 'rounded-button';
+    
+    // 전체 선택이거나 특정 캘린더 선택 시 해당 캘린더 색상 사용
+    const targetCalendarId = selectedCalendar || scheduleCalendarId;
+    
+    if (!targetCalendarId) {
+      return {
+        border: 'border-suwon-red/30',
+        shadow: 'shadow-lg shadow-suwon-red/20',
+        bg: 'bg-suwon-red/5',
+        hoverBg: 'hover:bg-suwon-red/15',
+        activeBg: 'active:bg-suwon-red/25',
+        rounded
+      };
+    }
+    
+    const index = calendars.findIndex(c => c.id === targetCalendarId);
+    if (index === 0) {
+      return {
+        border: 'border-suwon-red',
+        shadow: 'shadow-lg shadow-suwon-red/40',
+        bg: 'bg-suwon-red/10',
+        hoverBg: 'hover:bg-suwon-red/20',
+        activeBg: 'active:bg-suwon-red/30',
+        rounded
+      };
+    } else if (index === 1) {
+      return {
+        border: 'border-suwon-blue',
+        shadow: 'shadow-lg shadow-suwon-blue/40',
+        bg: 'bg-suwon-blue/10',
+        hoverBg: 'hover:bg-suwon-blue/20',
+        activeBg: 'active:bg-suwon-blue/30',
+        rounded
+      };
+    } else {
+      return {
+        border: 'border-suwon-red',
+        shadow: 'shadow-lg shadow-suwon-red/40',
+        bg: 'bg-suwon-red/10',
+        hoverBg: 'hover:bg-suwon-red/20',
+        activeBg: 'active:bg-suwon-red/30',
+        rounded
+      };
+    }
+  };
+
   // 경기 상태별 표시
   const getStatusDisplay = (status: GameStatus, homeScore?: number, awayScore?: number) => {
     switch (status) {
@@ -130,10 +180,14 @@ export default function MatchScheduleClient({
     return `https://www.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dates}&location=${location}`;
   };
 
+  // POI 추출 함수 (장소 이름만)
+  const extractPoi = (venue: string): string => {
+    return venue.split(',')[0].trim();
+  };
+
   // 네이버 지도 연동 함수
   const getNaverMapUrl = (venue: string) => {
-    // 장소 이름(POI)만 추출 (콤마 뒤의 주소 제거)
-    const poi = venue.split(',')[0].trim();
+    const poi = extractPoi(venue);
     const encodedVenue = encodeURIComponent(poi);
     return `https://map.naver.com/v5/search/${encodedVenue}`;
   };
@@ -166,56 +220,62 @@ export default function MatchScheduleClient({
             </Card>
           ) : (
             <div className="space-y-3">
-              {filteredSchedules.map((schedule) => (
-                <Card key={schedule.id} className="p-5 border-2 border-suwon-red/30">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-3">
-                        {getHomeAwayDisplay(schedule.homeAway, extractOpponentName(schedule.opponent, schedule.venue))}
-                        {schedule.calendarName && (
-                          <span className="text-caption text-suwon-textSecondary">· {schedule.calendarName}</span>
-                        )}
+              {filteredSchedules.map((schedule) => {
+                const theme = getCardThemeClass(schedule.calendarId);
+                return (
+                  <Card 
+                    key={schedule.id} 
+                    className={`p-5 border-2 transition-all duration-300 ${theme.border} ${theme.shadow} ${theme.bg} ${theme.hoverBg} ${theme.activeBg} ${theme.rounded}`}
+                  >
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-3">
+                          {getHomeAwayDisplay(schedule.homeAway, extractOpponentName(schedule.opponent, schedule.venue))}
+                          {schedule.calendarName && (
+                            <span className="text-caption text-suwon-textSecondary">· {schedule.calendarName}</span>
+                          )}
+                        </div>
                       </div>
+                      {getStatusDisplay(schedule.status, schedule.homeScore, schedule.awayScore)}
                     </div>
-                    {getStatusDisplay(schedule.status, schedule.homeScore, schedule.awayScore)}
-                  </div>
-                  
-                  <div className="space-y-2 mb-4">
-                    <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
-                      <Clock className="w-4 h-4" />
-                      <span>{formatDate(schedule.date)} {schedule.time}</span>
+                    
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-body2 text-suwon-textSecondary">
+                        <Clock className="w-4 h-4" />
+                        <span>{formatDate(schedule.date)} {schedule.time}</span>
+                      </div>
+                      <Link 
+                        href={getNaverMapUrl(schedule.venue)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-body2 text-suwon-blue hover:text-suwon-red transition-colors cursor-pointer w-fit"
+                      >
+                        <MapPin className="w-4 h-4" />
+                        <span>{extractPoi(schedule.venue)}</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </Link>
+                      {schedule.weather && (
+                        <div className="text-caption text-suwon-textSecondary">
+                          날씨: {schedule.weather}
+                        </div>
+                      )}
                     </div>
+
                     <Link 
-                      href={getNaverMapUrl(schedule.venue)}
+                      href={getGoogleCalendarUrl(schedule)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-body2 text-suwon-blue hover:text-suwon-red transition-colors cursor-pointer w-fit"
+                      className="block"
                     >
-                      <MapPin className="w-4 h-4" />
-                      <span>{schedule.venue}</span>
-                      <ExternalLink className="w-3 h-3" />
-                    </Link>
-                    {schedule.weather && (
-                      <div className="text-caption text-suwon-textSecondary">
-                        날씨: {schedule.weather}
+                      <div className="flex items-center justify-center gap-2 py-2 px-4 bg-suwon-blue/20 text-suwon-blue rounded-button cursor-pointer hover:bg-suwon-blue/30 transition-colors">
+                        <Calendar className="w-4 h-4" />
+                        <span className="text-body2 font-bold">캘린더에 추가</span>
+                        <ExternalLink className="w-4 h-4" />
                       </div>
-                    )}
-                  </div>
-
-                  <Link 
-                    href={getGoogleCalendarUrl(schedule)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block"
-                  >
-                    <div className="flex items-center justify-center gap-2 py-2 px-4 bg-suwon-blue/20 text-suwon-blue rounded-button cursor-pointer hover:bg-suwon-blue/30 transition-colors">
-                      <Calendar className="w-4 h-4" />
-                      <span className="text-body2 font-bold">캘린더에 추가</span>
-                      <ExternalLink className="w-4 h-4" />
-                    </div>
-                  </Link>
-                </Card>
-              ))}
+                    </Link>
+                  </Card>
+                );
+              })}
             </div>
           )}
         </>
